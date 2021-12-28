@@ -9,13 +9,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
     ServerSocket serverSocket;
 
-    public void startServer() {
+
+    public void start() {
         try {
             serverSocket = new ServerSocket(13245);
+            ExecutorService es = Executors.newFixedThreadPool(64);
+            es.execute(this::clientConnect);
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
